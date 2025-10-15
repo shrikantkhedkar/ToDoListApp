@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "577984268051",
+    "project_id": "todoapp-9c7ce",
+    "storage_bucket": "todoapp-9c7ce.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:577984268051:android:927ffcd5cfe07c15597ce6",
+        "android_client_info": {
+          "package_name": "com.example.rbricks_test"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6PuF5wQVFlczDjvhUnZbm0HyCyTMu1V8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
