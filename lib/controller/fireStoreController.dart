@@ -1,38 +1,46 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:rbricks_test/model/ToDoModel.dart';
+import '../model/ToDoModel.dart';
 
 class ToDoControllerFirebase {
-  final CollectionReference todoCollection = FirebaseFirestore.instance
-      .collection('todos');
+  final CollectionReference<Map<String, dynamic>> todoCollection =
+      FirebaseFirestore.instance.collection('todos');
 
-  Future<List<ToDoModel>> getToDoItems() async {
-    QuerySnapshot snapshot = await todoCollection.get();
-    return snapshot.docs.map((doc) {
-      return ToDoModel(
-        id: doc.id.hashCode,
-        title: doc['title'],
-        description: doc['description'],
-        date: doc['date'],
-      );
-    }).toList();
+  // Real-time stream
+  Stream<List<ToDoModel>> streamToDoItems() {
+    return todoCollection.snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return ToDoModel(
+          id: doc.id,
+          title: doc['title'],
+          description: doc['description'],
+          date: doc['date'],
+        );
+      }).toList();
+    });
   }
 
+  // Add ToDo
   Future<void> addToDoItem(ToDoModel todo) async {
-    await todoCollection.add({
+    DocumentReference docRef = await todoCollection.add({
       'title': todo.title,
       'description': todo.description,
       'date': todo.date,
     });
+    todo.id = docRef.id;
   }
 
-  Future<void> updateToDoItem(String docId, ToDoModel todo) async {
-    await todoCollection.doc(docId).update({
-      'title': todo.title,
-      'description': todo.description,
-      'date': todo.date,
-    });
+  // Update ToDo
+  Future<void> updateToDoItem(ToDoModel todo) async {
+    if (todo.id != null) {
+      await todoCollection.doc(todo.id).update({
+        'title': todo.title,
+        'description': todo.description,
+        'date': todo.date,
+      });
+    }
   }
 
+  // Delete ToDo
   Future<void> deleteToDoItem(String docId) async {
     await todoCollection.doc(docId).delete();
   }
